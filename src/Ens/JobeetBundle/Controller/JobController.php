@@ -24,7 +24,7 @@ class JobController extends Controller
 
         $jobs = $em->getRepository('EnsJobeetBundle:Job')->findAll();
 
-        return $this->render('job/index.html.twig', array(
+        return $this->render('EnsJobeetBundle:Job:index.html.twig', array(
             'jobs' => $jobs,
         ));
     }
@@ -61,7 +61,7 @@ class JobController extends Controller
     {
         $deleteForm = $this->createDeleteForm($job);
 
-        return $this->render('job/show.html.twig', array(
+        return $this->render('EnsJobeetBundle:Job:show.html.twig', array(
             'job' => $job,
             'delete_form' => $deleteForm->createView(),
         ));
