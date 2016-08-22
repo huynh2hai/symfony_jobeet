@@ -22,10 +22,16 @@ class JobController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $jobs = $em->getRepository('EnsJobeetBundle:Job')->findAll();
+        $categories = $em->getRepository('EnsJobeetBundle:Category')->getWithJobs();
 
+
+        foreach($categories as $category)
+        {
+          $category->setActiveJobs($em->getRepository('EnsJobeetBundle:Job')->getActiveJobs($category->getId(), $this->container->getParameter('max_jobs_on_homepage')));
+        }
+        
         return $this->render('EnsJobeetBundle:Job:index.html.twig', array(
-            'jobs' => $jobs,
+          'categories' => $categories
         ));
     }
 
@@ -57,8 +63,11 @@ class JobController extends Controller
      * Finds and displays a Job entity.
      *
      */
-    public function showAction(Job $job)
+    public function showAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
+        $job = $em->getRepository('EnsJobeetBundle:Job')->getActiveJob($id);
+
         $deleteForm = $this->createDeleteForm($job);
 
         return $this->render('EnsJobeetBundle:Job:show.html.twig', array(
